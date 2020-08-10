@@ -1,0 +1,24 @@
+{
+  "name": "Mouse Jiggler Skill",
+  "skillname": "skill-mouse-jiggler",
+  "authorname": "JarbasSkills",
+  "foldername": "",
+  "url": "https://github.com/JarbasSkills/skill-mouse-jiggler",
+  "branch": "master",
+  "desktopFile": false,
+  "warning": "",
+  "systemDeps": false,
+  "platforms": [
+    "arm",
+    "arm64",
+    "i386",
+    "x86_64",
+    "ia64"
+  ],
+  "examples": [
+    "Start mouse activity",
+    "Stop mouse activity",
+    "Enable mouse jiggler",
+    "Disable mouse jiggler"
+  ]
+}

@@ -1,0 +1,4 @@
+mouse (activity|jiggle|jiggler) status
+is mouse (activity|jiggle|jiggler) (on|enabled|started)
+is mouse (activity|jiggle|jiggler) (off|disabled|stopped)
+(what|how) is mouse (activity|jiggle|jiggler)
