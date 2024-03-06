@@ -1,12 +1,15 @@
-from mycroft.skills.core import MycroftSkill, intent_file_handler
-from mycroft.messagebus.message import Message
-from jiggle import MouseJiggler
 from time import sleep
 
+from jiggle import MouseJiggler
+from ovos_bus_client.message import Message
+from ovos_workshop.decorators import intent_handler
+from ovos_workshop.skills import OVOSSkill
 
-class MouseJigglerSkill(MycroftSkill):
-    def __init__(self):
-        super(MouseJigglerSkill, self).__init__("MouseJigglerSkill")
+
+class MouseJigglerSkill(OVOSSkill):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.jiggler = None
         if "auto_start" not in self.settings:
             self.settings["auto_start"] = True
@@ -26,9 +29,11 @@ class MouseJigglerSkill(MycroftSkill):
                                     ignore_idle=self.settings["always_on"])
 
         def on_mouse_move(mouse_position):
-            self.bus.emit(Message("mouse.position",
-                                  {"x": mouse_position.x,
-                                   "y": mouse_position.y}))
+            self.bus.emit(
+                Message("mouse.position", {
+                    "x": mouse_position.x,
+                    "y": mouse_position.y
+                }))
 
         def on_jiggle():
             self.bus.emit(Message("mouse.jiggle"))
@@ -66,25 +71,23 @@ class MouseJigglerSkill(MycroftSkill):
 
     # homescreen
     def handle_homescreen(self, message):
-        j = MouseJiggler(daemonic=True,
-                         jiggle=10,
-                         ignore_idle=True)
+        j = MouseJiggler(daemonic=True, jiggle=10, ignore_idle=True)
         j.start()
         sleep(30)
         j.stop()
 
     # Intents
-    @intent_file_handler("mouse_start.intent")
+    @intent_handler("mouse_start.intent")
     def handle_start(self, message):
         self.start_mouse()
         self.speak_dialog("jiggle_start")
 
-    @intent_file_handler("mouse_stop.intent")
+    @intent_handler("mouse_stop.intent")
     def handle_stop(self, message):
         self.stop_mouse()
         self.speak_dialog("jiggle_stop")
 
-    @intent_file_handler("mouse_status.intent")
+    @intent_handler("mouse_status.intent")
     def handle_status(self, message):
         status = True
         if self.jiggler is None:
@@ -93,7 +96,3 @@ class MouseJigglerSkill(MycroftSkill):
             self.speak_dialog("jiggle_status_on")
         else:
             self.speak_dialog("jiggle_status_off")
-
-
-def create_skill():
-    return MouseJigglerSkill()
